@@ -163,10 +163,25 @@ function renderGroups(){
   renderTargetGroups();
 }
 
+function updateTargetGroupSelectionUI(){
+  const inputs=$$('#targetGroups .target-checkbox');
+  const selected=inputs.filter(i=>i.checked).length;
+  const countEl=$('#selectedGroupCount');
+  if(countEl) countEl.textContent=`${selected} selected`;
+  const allSelected=inputs.length>0 && selected===inputs.length;
+  const selectAll=$('#selectAllGroups');
+  if(selectAll) selectAll.textContent=allSelected?'Clear all':'Select all';
+}
+
 function renderTargetGroups(){
   if(!$('#targetGroups')) return;
-  $('#targetGroups').innerHTML=state.groups.length?state.groups.map(g=>`<label class="target-option"><input type="checkbox" value="${esc(g.id)}"><span><strong>${esc(g.name)}</strong><small>${esc(g.area)} · ${esc(g.type)}</small></span></label>`).join(''):'<p class="muted">No groups saved yet.</p>';
+  $('#targetGroups').innerHTML=state.groups.length?state.groups.map((g,idx)=>{
+    const cid=`targetGroup_${String(g.id).replace(/[^a-zA-Z0-9_-]/g,'_')}_${idx}`;
+    return `<label class="target-option" for="${cid}"><input class="target-checkbox" id="${cid}" type="checkbox" value="${esc(g.id)}"><span class="target-check-ui" aria-hidden="true"></span><span class="target-copy"><strong>${esc(g.name)}</strong><small>${esc(g.area)} · ${esc(g.type)}</small></span></label>`;
+  }).join(''):'<p class="muted">No groups saved yet.</p>';
   $('#groupWarning').textContent=state.groups.length?'':'Add at least one Facebook Group before creating a queue item.';
+  $$('#targetGroups .target-checkbox').forEach(input=>input.addEventListener('change',updateTargetGroupSelectionUI));
+  updateTargetGroupSelectionUI();
 }
 
 function renderHistory(){
@@ -305,7 +320,12 @@ $('#timingMode').addEventListener('change',()=>{ const scheduled=$('#timingMode'
 $('#listingInput').addEventListener('input',()=>{ if(!$('#captionInput').dataset.touched) $('#captionInput').value=defaultCaption($('#listingInput').value.trim()); syncPreview(); });
 $('#captionInput').addEventListener('input',()=>{ $('#captionInput').dataset.touched='1'; syncPreview(); });
 $('#imageUrlsInput').addEventListener('input',syncPreview);
-$('#selectAllGroups').addEventListener('click',()=>$$('#targetGroups input').forEach(i=>i.checked=true));
+$('#selectAllGroups').addEventListener('click',()=>{
+  const inputs=$$('#targetGroups .target-checkbox');
+  const shouldCheck=!inputs.length?false:!inputs.every(i=>i.checked);
+  inputs.forEach(i=>{ i.checked=shouldCheck; });
+  updateTargetGroupSelectionUI();
+});
 $('#savePostBtn').addEventListener('click',saveComposerPost);
 $('#saveScheduleEditBtn').addEventListener('click',saveScheduleEdit); $('#deletePostBtn').addEventListener('click',deletePost);
 $('#syncExtensionBtn').addEventListener('click',()=>{ syncToExtension(); requestExtensionState(); toast(bridgeAvailable?'Queue synced to extension':'Sync sent. Open/reload the extension if needed.'); });
