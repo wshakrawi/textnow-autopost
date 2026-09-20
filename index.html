@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TEXTME AutoPost</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">T</span><span>TEXTME</span></div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="overview"><span>⌂</span> Overview</button>
+        <button class="nav-item" data-view="create"><span>＋</span> Create Post</button>
+        <button class="nav-item" data-view="schedule"><span>◷</span> Schedule</button>
+        <button class="nav-item" data-view="queue"><span>≡</span> Post Queue</button>
+        <button class="nav-item" data-view="groups"><span>◎</span> FB Groups</button>
+        <button class="nav-item" data-view="templates"><span>▤</span> Templates</button>
+        <button class="nav-item" data-view="history"><span>↺</span> History</button>
+        <button class="nav-item" data-view="analytics"><span>⌁</span> Analytics</button>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="connect-card">
+          <div class="dot"></div>
+          <div><strong>Extension ready</strong><small>Chrome assistant connected</small></div>
+        </div>
+        <button class="ghost-btn">Settings</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-only" id="menuBtn">☰</button>
+        <div class="search-wrap">
+          <span>⌕</span><input id="globalSearch" placeholder="Search listing, group or post..." />
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn">?</button>
+          <button class="icon-btn">♢</button>
+          <div class="avatar">WS</div>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="page-head">
+          <div><p class="eyebrow">Facebook posting assistant</p><h1>AutoPost</h1><p class="muted">Plan, prepare and manage Facebook Group posts from one workspace.</p></div>
+          <button class="primary-btn" data-open-composer>＋ Create Post</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon">◷</div><div><small>Scheduled today</small><strong>12</strong><span class="up">+3 from yesterday</span></div></article>
+          <article class="stat-card"><div class="stat-icon">✓</div><div><small>Posted</small><strong>8</strong><span>67% completed</span></div></article>
+          <article class="stat-card"><div class="stat-icon">◎</div><div><small>Active groups</small><strong>36</strong><span>4 group sets</span></div></article>
+          <article class="stat-card"><div class="stat-icon">!</div><div><small>Needs action</small><strong>1</strong><span class="warn">Review required</span></div></article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel span-2">
+            <div class="panel-head"><div><h2>Upcoming posts</h2><p>Next scheduled posting sessions</p></div><button class="text-btn" data-view-link="queue">View queue →</button></div>
+            <div id="upcomingList" class="upcoming-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h2>Posting assistant</h2><p>Chrome extension status</p></div><span class="badge success">Connected</span></div>
+            <div class="assistant-card">
+              <div class="ring"><span>9</span><small>/15</small></div>
+              <div><h3>Vista Seri Putra</h3><p>Current posting session</p><div class="progress"><i style="width:60%"></i></div><div class="mini-row"><span>9 posted</span><span>6 remaining</span></div></div>
+            </div>
+            <button class="secondary-btn full">Open Posting Session</button>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head"><div><h2>Recent activity</h2><p>Latest queue updates</p></div><button class="text-btn" data-view-link="history">View history →</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Listing</th><th>Target</th><th>Schedule</th><th>Status</th><th></th></tr></thead><tbody id="recentTable"></tbody></table></div>
+        </section>
+      </section>
+
+      <section class="view" id="view-groups">
+        <div class="page-head"><div><p class="eyebrow">Library</p><h1>Facebook Groups</h1><p class="muted">Organise groups by area, purpose and posting set.</p></div><button class="primary-btn" id="addGroupBtn">＋ Add Group</button></div>
+        <div class="toolbar">
+          <div class="search-wrap compact"><span>⌕</span><input id="groupSearch" placeholder="Search groups..." /></div>
+          <div class="chips" id="groupFilters"><button class="chip active" data-filter="all">All</button><button class="chip" data-filter="rental">Rental</button><button class="chip" data-filter="subsale">Subsale</button><button class="chip" data-filter="room">Room</button><button class="chip" data-filter="land">Land</button></div>
+        </div>
+        <div class="group-layout">
+          <section class="panel"><div class="panel-head"><div><h2>Group library</h2><p><span id="groupCount">0</span> groups saved</p></div></div><div id="groupCards" class="group-cards"></div></section>
+          <aside class="panel"><div class="panel-head"><div><h2>Group sets</h2><p>Reusable posting targets</p></div></div><div id="groupSets" class="set-list"></div><button class="secondary-btn full">＋ New Group Set</button></aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-queue">
+        <div class="page-head"><div><p class="eyebrow">Operations</p><h1>Post Queue</h1><p class="muted">Track scheduled, ready and completed posts.</p></div><button class="primary-btn" data-open-composer>＋ Create Post</button></div>
+        <section class="panel"><div class="queue-tabs"><button class="chip active">All</button><button class="chip">Scheduled</button><button class="chip">Ready</button><button class="chip">Posted</button><button class="chip">Needs action</button></div><div class="table-wrap"><table><thead><tr><th>Post</th><th>Groups</th><th>Schedule</th><th>Progress</th><th>Status</th><th></th></tr></thead><tbody id="queueTable"></tbody></table></div></section>
+      </section>
+
+      <section class="view" id="view-schedule">
+        <div class="page-head"><div><p class="eyebrow">Planner</p><h1>Schedule</h1><p class="muted">Space posts naturally across groups and time windows.</p></div><button class="primary-btn" data-open-composer>＋ Schedule Post</button></div>
+        <div class="schedule-grid" id="scheduleGrid"></div>
+      </section>
+
+      <section class="view" id="view-create"></section>
+      <section class="view" id="view-templates"><div class="empty"><h2>Templates</h2><p>Save reusable caption structures for rental, subsale and land listings.</p><button class="primary-btn">＋ New Template</button></div></section>
+      <section class="view" id="view-history"><div class="empty"><h2>Posting History</h2><p>Successful and failed sessions will appear here with group-level logs.</p></div></section>
+      <section class="view" id="view-analytics"><div class="empty"><h2>Analytics</h2><p>Track listing clicks, WhatsApp clicks and source tags by Facebook Group.</p></div></section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="composerModal" aria-hidden="true">
+    <div class="modal large">
+      <div class="modal-head"><div><p class="eyebrow">New Facebook post</p><h2>Create Post</h2></div><button class="icon-btn" id="closeComposer">×</button></div>
+      <div class="composer-grid">
+        <div class="composer-form">
+          <label>Listing<select id="listingSelect"><option>Vista Seri Putra</option><option>Adelia 2 Bangi</option><option>Suites @ Edusentral</option><option>Tulip Residence Denai Alam</option></select></label>
+          <div class="two-col"><label>Post type<select id="postType"><option>Rental</option><option>Subsale</option><option>Room</option><option>Land</option></select></label><label>Schedule<input type="datetime-local" id="scheduleInput" /></label></div>
+          <label>Caption<textarea id="captionInput" rows="10">FOR RENT | Vista Seri Putra\n\n3 Bedrooms • 2 Bathrooms\nStrategic location with easy access to Bangi & Kajang.\n\nInterested? WhatsApp for viewing appointment.</textarea></label>
+          <div class="field-head"><span>Photos</span><small>6 selected</small></div>
+          <div class="photo-grid" id="photoGrid"></div>
+          <div class="field-head"><span>Target groups</span><button class="text-btn" id="selectAllGroups">Select all</button></div>
+          <div class="target-box" id="targetGroups"></div>
+        </div>
+        <aside class="preview-card">
+          <p class="eyebrow">Preview</p>
+          <div class="fb-post">
+            <div class="fb-head"><div class="avatar small">WS</div><div><strong>Wan Shakrawi</strong><small>Just now · Public</small></div></div>
+            <p id="previewCaption"></p>
+            <div class="preview-image"><span>Property photos preview</span></div>
+            <div class="fb-actions"><span>Like</span><span>Comment</span><span>Share</span></div>
+          </div>
+          <div class="notice"><strong>Assisted posting</strong><p>The extension prepares caption and media. Final Facebook publish remains user-confirmed.</p></div>
+        </aside>
+      </div>
+      <div class="modal-actions"><button class="ghost-btn" id="saveDraftBtn">Save draft</button><button class="secondary-btn" id="scheduleBtn">Schedule</button><button class="primary-btn" id="addQueueBtn">Add to Queue</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
