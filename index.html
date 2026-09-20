@@ -3,19 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" content="#f7f8fa" />
   <title>TEXTME AutoPost</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar" id="sidebar">
-      <div class="brand"><span class="brand-mark">T</span><span>TEXTME</span></div>
+      <div class="brand"><span class="brand-word">textme</span><span class="brand-sub">AutoPost</span></div>
       <nav class="nav">
+        <div class="side-label">MENU</div>
         <button class="nav-item active" data-view="overview"><span>⌂</span> Overview</button>
         <button class="nav-item" data-view="create"><span>＋</span> Create Post</button>
         <button class="nav-item" data-view="schedule"><span>◷</span> Schedule</button>
         <button class="nav-item" data-view="queue"><span>≡</span> Post Queue</button>
+        <div class="side-label nav-spacer">MANAGEMENT</div>
         <button class="nav-item" data-view="groups"><span>◎</span> FB Groups</button>
         <button class="nav-item" data-view="history"><span>↺</span> History</button>
         <button class="nav-item" data-view="analytics"><span>⌁</span> Analytics</button>
@@ -31,11 +33,16 @@
 
     <main class="main">
       <header class="topbar">
-        <button class="icon-btn mobile-only" id="menuBtn">☰</button>
-        <div class="search-wrap"><span>⌕</span><input id="globalSearch" placeholder="Search listing, group or post..." /></div>
+        <div class="topbar-left">
+          <button class="icon-btn mobile-only" id="menuBtn">☰</button>
+          <div class="search-wrap"><span>⌕</span><input id="globalSearch" placeholder="Search listing, group or post..." /></div>
+          <div class="top-links"><span>AutoPost</span><span>Facebook Groups</span><span>Projects</span></div>
+        </div>
         <div class="top-actions">
+          <button class="top-circle" aria-label="Apps">▦</button>
+          <button class="top-circle has-dot" aria-label="Notifications">●</button>
           <span class="timezone">MYT · UTC+8</span>
-          <div class="avatar">WS</div>
+          <div class="user-menu"><div class="avatar">WS</div><div class="user-copy"><strong>Wan Shak</strong><small>Property Agent</small></div><span class="chev">⌄</span></div>
         </div>
       </header>
 
@@ -44,6 +51,7 @@
           <div><p class="eyebrow">Facebook posting assistant</p><h1>AutoPost</h1><p class="muted">Plan, prepare and manage Facebook Group posting sessions from one workspace.</p></div>
           <button class="primary-btn" data-open-composer>＋ Create Post</button>
         </div>
+        <div class="identity-tabs"><button class="identity-tab active">Overview</button><button class="identity-tab" data-view-link="queue">Post Queue</button><button class="identity-tab" data-view-link="schedule">Schedule</button></div>
         <div class="stats-grid" id="statsGrid"></div>
         <div class="content-grid">
           <section class="panel span-2">

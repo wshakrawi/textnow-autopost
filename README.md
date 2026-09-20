@@ -1,3 +1,19 @@
+# TEXTME AutoPost v1.3 — Architect Identity Refresh
+
+This version keeps all v1.2 local-first functionality and updates the dashboard + Chrome extension UI to a lighter enterprise dashboard identity inspired by the provided reference: white navigation, pale grey workspace, compact cards, thin borders, bright blue focus states, coloured KPI accents, and denser information hierarchy.
+
+## v1.3 visual changes
+- Light left sidebar with section labels and blue active states
+- White compact top navigation with search, utility icons and user profile
+- Page title cards with subtle icon tile treatment
+- Blue tab/button system with small radii and soft shadows
+- KPI row presented as one combined performance panel
+- Compact table/card typography and thin separators
+- Blue / green / amber / magenta status accents
+- Matching Chrome extension popup identity
+
+---
+
 # TEXTME AutoPost v1.2
 
 Fixes:
