@@ -1,3 +1,12 @@
+# TEXTME AutoPost v1.2
+
+Fixes:
+- Group Library Edit button now uses delegated events and remains clickable after any rerender.
+- Clicking a Group Library card also opens the editor.
+- Edit modal can change group name, Facebook URL, area and type.
+- Save updates the card immediately; Delete removes the group and its queue targets.
+- Keyboard Enter/Space on a group card also opens Edit.
+
 # TEXTME AutoPost v1.0 — Workable Local-First MVP
 
 A browser-based Facebook Group posting assistant. The dashboard runs as a static site (ideal for Vercel) and the Chrome extension keeps a local copy of the posting queue.

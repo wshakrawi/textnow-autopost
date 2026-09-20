@@ -155,10 +155,9 @@ function renderGroups(){
   const q=($('#groupSearch')?.value||'').toLowerCase().trim();
   const list=state.groups.filter(g=>(activeFilter==='all'||g.type===activeFilter) && (!q||g.name.toLowerCase().includes(q)||g.area.toLowerCase().includes(q)));
   $('#groupCount').textContent=list.length;
-  $('#groupCards').innerHTML=list.length?list.map(g=>`<article class="group-card"><div class="group-top"><div><h3>${esc(g.name)}</h3><p>${esc(g.area)} · ${esc(g.type)}</p></div><button class="table-btn" data-edit-group="${esc(g.id)}">Edit</button></div><div class="meta-row"><span class="tag">${esc(g.type)}</span><span class="tag url-tag" title="${esc(g.url)}">${g.url.includes('/groups/')?'Group URL saved':'Check URL'}</span></div></article>`).join(''):`<div class="empty-inline">No groups match this filter.</div>`;
+  $('#groupCards').innerHTML=list.length?list.map(g=>`<article class="group-card" data-group-card="${esc(g.id)}" role="button" tabindex="0" aria-label="Edit ${esc(g.name)}"><div class="group-top"><div><h3>${esc(g.name)}</h3><p>${esc(g.area)} · ${esc(g.type)}</p></div><button type="button" class="table-btn" data-edit-group="${esc(g.id)}">Edit</button></div><div class="meta-row"><span class="tag">${esc(g.type)}</span><span class="tag url-tag" title="${esc(g.url)}">${g.url.includes('/groups/')?'Group URL saved':'Check URL'}</span></div></article>`).join(''):`<div class="empty-inline">No groups match this filter.</div>`;
   const counts=['rental','subsale','room','land'].map(type=>[type,state.groups.filter(g=>g.type===type).length]);
   $('#groupSets').innerHTML=counts.filter(x=>x[1]).map(([type,count])=>`<button class="set-card" data-set-type="${type}"><div><strong>${esc(type[0].toUpperCase()+type.slice(1))}</strong><small>${count} groups</small></div><span>›</span></button>`).join('') || '<p class="muted">No sets yet.</p>';
-  $$('[data-edit-group]').forEach(b=>b.onclick=()=>openGroupModal(b.dataset.editGroup));
   $$('[data-set-type]').forEach(b=>b.onclick=()=>{ activeFilter=b.dataset.setType; $$('#groupFilters .chip').forEach(x=>x.classList.toggle('active',x.dataset.filter===activeFilter)); renderGroups(); });
   renderTargetGroups();
 }
@@ -248,8 +247,17 @@ function deletePost(){
 
 // Group editor
 function openGroupModal(id=null){
-  editingGroupId=id; const g=id?state.groups.find(x=>x.id===id):null;
-  $('#groupModalTitle').textContent=g?'Edit Group':'Add Group'; $('#groupNameInput').value=g?.name||''; $('#groupUrlInput').value=g?.url||''; $('#groupAreaInput').value=g?.area||''; $('#groupTypeInput').value=g?.type||'rental'; $('#deleteGroupBtn').classList.toggle('hidden',!g); openModal('groupModal');
+  editingGroupId=id || null;
+  const g=editingGroupId ? state.groups.find(x=>x.id===editingGroupId) : null;
+  if(editingGroupId && !g){ toast('Group not found. Refresh and try again.'); return; }
+  $('#groupModalTitle').textContent=g?'Edit Group':'Add Group';
+  $('#groupNameInput').value=g?.name||'';
+  $('#groupUrlInput').value=g?.url||'';
+  $('#groupAreaInput').value=g?.area||'';
+  $('#groupTypeInput').value=g?.type||'rental';
+  $('#deleteGroupBtn').classList.toggle('hidden',!g);
+  openModal('groupModal');
+  requestAnimationFrame(()=>$('#groupNameInput')?.focus());
 }
 function saveGroup(){
   const name=$('#groupNameInput').value.trim(), url=$('#groupUrlInput').value.trim(), area=$('#groupAreaInput').value.trim();
@@ -301,6 +309,26 @@ window.addEventListener('message',e=>{
       fields.forEach(f=>{ if(ep[f]!==undefined){ p[f]=ep[f]; changed=true; } });
     });
     if(changed){ saveState({sync:false}); renderAll(); }
+  }
+});
+
+// Robust delegated handlers for dynamic Group Library cards/buttons.
+document.addEventListener('click',e=>{
+  const editBtn=e.target.closest('[data-edit-group]');
+  if(editBtn){
+    e.preventDefault(); e.stopPropagation();
+    openGroupModal(editBtn.dataset.editGroup);
+    return;
+  }
+  const card=e.target.closest('[data-group-card]');
+  if(card && !e.target.closest('button,a,input,select,textarea')){
+    e.preventDefault();
+    openGroupModal(card.dataset.groupCard);
+  }
+});
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ') && e.target.matches?.('[data-group-card]')){
+    e.preventDefault(); openGroupModal(e.target.dataset.groupCard);
   }
 });
 
